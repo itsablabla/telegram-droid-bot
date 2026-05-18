@@ -55,6 +55,8 @@ EOF
 chmod 600 /etc/telegram-droid-bot.env
 ```
 
+The service template uses `EnvironmentFile=-/etc/telegram-droid-bot.env`, so systemd will still start if the env file is absent during local quick-start testing. For production deployments, create the file before starting the service.
+
 `DROID_GROUP_CONFIGS` is JSON where each key is a Telegram group chat ID and each value has:
 
 - `cwd`: workspace path for that group

@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/path/to/telegram-droid-bot
-EnvironmentFile=/etc/telegram-droid-bot.env
+EnvironmentFile=-/etc/telegram-droid-bot.env
 
 ExecStart=/usr/bin/node /path/to/telegram-droid-bot/index.js
 Restart=always
