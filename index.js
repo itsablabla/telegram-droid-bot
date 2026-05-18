@@ -98,7 +98,7 @@ const DROID_ENV = {
 };
 const HOME = process.env.HOME || '/root';
 
-const bot = new Telegraf(TELEGRAM_BOT_TOKEN, { handlerTimeout: 0 }); // 0=无限，由 spawn DROID_TIMEOUT 统一控制
+const bot = new Telegraf(TELEGRAM_BOT_TOKEN, { handlerTimeout: Infinity }); // 无限，由 spawn DROID_TIMEOUT 统一控制
 const userSessions = new Map();
 
 // ==================== 上下文感知 ====================
