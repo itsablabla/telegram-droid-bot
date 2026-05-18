@@ -17,12 +17,29 @@ const DROID_PATH = process.env.DROID_PATH || '/root/.local/bin/droid';
 const DROID_CWD = process.env.DROID_CWD || '/root/Peter工作空间';
 let DROID_TIMEOUT = parseInt(process.env.DROID_TIMEOUT) || 120000;
 
+function parseGroupConfigs(raw) {
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw);
+    const configs = {};
+    for (const [chatId, cfg] of Object.entries(parsed)) {
+      if (cfg && typeof cfg.cwd === 'string' && cfg.cwd.trim()) {
+        configs[String(chatId)] = {
+          cwd: cfg.cwd,
+          label: typeof cfg.label === 'string' && cfg.label.trim() ? cfg.label : '群聊',
+        };
+      }
+    }
+    return configs;
+  } catch (e) {
+    console.error('[CONFIG] Failed to parse DROID_GROUP_CONFIGS:', e.message);
+    return {};
+  }
+}
+
 // 群聊配置: chatId -> { cwd, label }
-const GROUP_CONFIGS = {
-  '-3872540185': { cwd: '/root/家庭工作空间', label: '家庭' },
-  '-1003872540185': { cwd: '/root/家庭工作空间', label: '家庭' },
-};
-const PRIVATE_CWD = '/root/Peter工作空间';
+const GROUP_CONFIGS = parseGroupConfigs(process.env.DROID_GROUP_CONFIGS);
+const PRIVATE_CWD = process.env.DROID_PRIVATE_CWD || DROID_CWD;
 
 const SESSION_FILE = path.join(__dirname, 'sessions.json');
 const REMINDER_FILE = path.join(__dirname, 'reminders.json');

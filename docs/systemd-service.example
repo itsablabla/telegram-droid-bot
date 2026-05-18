@@ -6,29 +6,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/path/to/telegram-droid-bot
-
-# Required: Telegram Bot Token (from @BotFather)
-Environment="TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here"
-
-# Required: Allowed Telegram user IDs (comma-separated)
-Environment="ALLOWED_USERS=your_user_id_here"
-
-# Required: Droid CLI model
-Environment="DROID_MODEL=custom:minimax-m2.7"
-
-# Required: Droid CLI path
-Environment="DROID_PATH=/usr/local/bin/droid"
-
-# Optional: Default working directory for private chats
-Environment="DROID_CWD=/home/user"
-
-# Optional: Droid execution timeout (ms)
-Environment="DROID_TIMEOUT=120000"
-
-# Optional: Custom model API keys
-# Environment="MINIMAX_API_KEY=your_minimax_api_key_here"
-# Environment="ZAI_API_KEY=your_zai_api_key_here"
-# Environment="XFYUN_API_KEY=your_xfyun_api_key_here"
+EnvironmentFile=/etc/telegram-droid-bot.env
 
 ExecStart=/usr/bin/node /path/to/telegram-droid-bot/index.js
 Restart=always
