@@ -1,0 +1,24 @@
+{
+  "customModels": [
+    {
+      "model": "gpt-5.4-mini",
+      "id": "custom:garza-gpt-5.4-mini",
+      "baseUrl": "${GARZA_LLM_BASE_URL}",
+      "apiKey": "${GARZA_LLM_API_KEY}",
+      "displayName": "CLIProxyAPI llm.garza.online",
+      "maxOutputTokens": 131072,
+      "noImageSupport": true,
+      "provider": "generic-chat-completion-api"
+    },
+    {
+      "model": "MiniMax-M2.7",
+      "id": "custom:minimax-m2.7",
+      "baseUrl": "https://api.minimaxi.com/v1",
+      "apiKey": "${MINIMAX_API_KEY}",
+      "displayName": "MiniMax M2.7",
+      "maxOutputTokens": 131072,
+      "noImageSupport": true,
+      "provider": "generic-chat-completion-api"
+    }
+  ]
+}

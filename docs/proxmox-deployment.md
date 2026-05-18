@@ -45,6 +45,9 @@ DROID_CWD=/root
 DROID_PRIVATE_CWD=/root/private-workspace
 DROID_TIMEOUT=120000
 # DROID_GROUP_CONFIGS={"-1001234567890":{"cwd":"/root/family-workspace","label":"Family"}}
+# GARZA_LLM_BASE_URL=https://llm.garza.online/v1
+# GARZA_LLM_MODEL=gpt-5.4-mini
+# GARZA_LLM_API_KEY=replace_if_using_garza_llm
 # MINIMAX_API_KEY=replace_if_using_custom_minimax
 # ZAI_API_KEY=replace_if_using_zai
 # XFYUN_API_KEY=replace_if_using_xfyun
@@ -57,7 +60,30 @@ chmod 600 /etc/telegram-droid-bot.env
 - `cwd`: workspace path for that group
 - `label`: display label used in Telegram replies and logs
 
-## 4. Install systemd service
+## 4. Configure Droid custom models
+
+If using the Garza OpenAI-compatible LLM endpoint, add a custom model entry to the Droid settings file for the service user, usually `/root/.factory/settings.local.json` when the service runs as root:
+
+```json
+{
+  "customModels": [
+    {
+      "model": "gpt-5.4-mini",
+      "id": "custom:garza-gpt-5.4-mini",
+      "baseUrl": "${GARZA_LLM_BASE_URL}",
+      "apiKey": "${GARZA_LLM_API_KEY}",
+      "displayName": "CLIProxyAPI llm.garza.online",
+      "maxOutputTokens": 131072,
+      "noImageSupport": true,
+      "provider": "generic-chat-completion-api"
+    }
+  ]
+}
+```
+
+Then set `DROID_MODEL=custom:garza-gpt-5.4-mini` in `/etc/telegram-droid-bot.env`.
+
+## 5. Install systemd service
 
 Copy the example unit and update paths if needed:
 
@@ -77,7 +103,7 @@ journalctl -u telegram-droid-bot -f
 
 The bot should log its model, Droid path, private working directory, configured group mappings, timeout, and allowed users at startup.
 
-## 5. Verify Telegram behavior
+## 6. Verify Telegram behavior
 
 From an allowed Telegram account:
 
@@ -92,7 +118,7 @@ From an allowed Telegram account:
 systemctl restart telegram-droid-bot
 ```
 
-## 6. Update deployment
+## 7. Update deployment
 
 ```bash
 cd /opt/telegram-droid-bot

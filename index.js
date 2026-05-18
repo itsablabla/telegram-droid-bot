@@ -46,6 +46,7 @@ const REMINDER_FILE = path.join(__dirname, 'reminders.json');
 
 // 模型列表
 const CUSTOM_MODELS = {
+  'garza': 'custom:garza-gpt-5.4-mini',
   'minimax': 'custom:minimax-m2.7',
   'glm4': 'custom:glm-4.7',
   'glm5': 'custom:glm-5.1',
@@ -86,6 +87,7 @@ const MODEL_REASONING = {
   'gemini-3.1-pro-preview': ['low','medium','high'],
   'gemini-3-flash-preview': ['minimal','low','medium','high'],
   'glm-5.1': [], 'kimi-k2.5': [], 'minimax-m2.7': ['high'],
+  'custom:garza-gpt-5.4-mini': ['low','medium','high','xhigh'],
   'custom:minimax-m2.7': ['high'], 'custom:glm-5.1': [], 'custom:glm-4.7': [], 'custom:astron-code-latest': [],
 };
 
