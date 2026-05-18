@@ -1,0 +1,7 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+/root/
+*.tar.gz
+.DS_Store
