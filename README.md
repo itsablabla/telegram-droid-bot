@@ -11,6 +11,7 @@ A Telegram bot that bridges [Factory Droid CLI](https://factory.ai) with Telegra
 - **Image Recognition** — Route photos to mmx-cli for vision analysis
 - **20+ Commands** — /remind, /model, /status, /skill, /mcp, etc.
 - **Reliability** — Auto-retry, atomic writes, session corruption detection
+- **Deployable on Proxmox** — Environment-driven workspace config and systemd service template
 
 ## Architecture
 
@@ -56,13 +57,11 @@ cp .env.example .env
 # Edit .env with your tokens and IDs
 ```
 
-Edit `index.js` to configure group chat mappings:
+Configure workspace paths through environment variables:
 
-```javascript
-const GROUP_CONFIGS = {
-  'YOUR_GROUP_CHAT_ID': { cwd: '/path/to/group-workspace', label: 'MyGroup' },
-};
-const PRIVATE_CWD = '/path/to/private-workspace';
+```bash
+DROID_PRIVATE_CWD=/path/to/private-workspace
+DROID_GROUP_CONFIGS='{"YOUR_GROUP_CHAT_ID":{"cwd":"/path/to/group-workspace","label":"MyGroup"}}'
 ```
 
 ### 4. Run
@@ -75,6 +74,8 @@ sudo cp docs/systemd-service.example /etc/systemd/system/telegram-droid-bot.serv
 # Edit the service file with your paths and tokens
 sudo systemctl enable --now telegram-droid-bot
 ```
+
+For Proxmox/LXC deployment, see `docs/proxmox-deployment.md`.
 
 ## Commands
 

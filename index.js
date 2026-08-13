@@ -35,18 +35,36 @@ const DROID_PATH = process.env.DROID_PATH || '/root/.local/bin/droid';
 const DROID_CWD = process.env.DROID_CWD || '/root/Peter工作空间';
 let DROID_TIMEOUT = parseInt(process.env.DROID_TIMEOUT) || 120000;
 
+function parseGroupConfigs(raw) {
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw);
+    const configs = {};
+    for (const [chatId, cfg] of Object.entries(parsed)) {
+      if (cfg && typeof cfg.cwd === 'string' && cfg.cwd.trim()) {
+        configs[String(chatId)] = {
+          cwd: cfg.cwd,
+          label: typeof cfg.label === 'string' && cfg.label.trim() ? cfg.label : '群聊',
+        };
+      }
+    }
+    return configs;
+  } catch (e) {
+    console.error('[CONFIG] Failed to parse DROID_GROUP_CONFIGS:', e.message);
+    return {};
+  }
+}
+
 // 群聊配置: chatId -> { cwd, label }
-const GROUP_CONFIGS = {
-  '-3872540185': { cwd: '/root/家庭工作空间', label: '家庭' },
-  '-1003872540185': { cwd: '/root/家庭工作空间', label: '家庭' },
-};
-const PRIVATE_CWD = '/root/Peter工作空间';
+const GROUP_CONFIGS = parseGroupConfigs(process.env.DROID_GROUP_CONFIGS);
+const PRIVATE_CWD = process.env.DROID_PRIVATE_CWD || DROID_CWD;
 
 const SESSION_FILE = path.join(__dirname, 'sessions.json');
 const REMINDER_FILE = path.join(__dirname, 'reminders.json');
 
 // 模型列表
 const CUSTOM_MODELS = {
+  'garza': 'custom:garza-gpt-5.4-mini',
   'minimax': 'custom:minimax-m2.7',
   'glm4': 'custom:glm-4.7',
   'glm5': 'custom:glm-5.1',
@@ -87,6 +105,7 @@ const MODEL_REASONING = {
   'gemini-3.1-pro-preview': ['low','medium','high'],
   'gemini-3-flash-preview': ['minimal','low','medium','high'],
   'glm-5.1': [], 'kimi-k2.5': [], 'minimax-m2.7': ['high'],
+  'custom:garza-gpt-5.4-mini': ['low','medium','high','xhigh'],
   'custom:minimax-m2.7': ['high'], 'custom:glm-5.1': [], 'custom:glm-4.7': [], 'custom:astron-code-latest': [],
 };
 
@@ -97,7 +116,7 @@ const DROID_ENV = {
 };
 const HOME = process.env.HOME || '/root';
 
-const bot = new Telegraf(TELEGRAM_BOT_TOKEN, { handlerTimeout: 0 }); // 0=无限，由 spawn DROID_TIMEOUT 统一控制
+const bot = new Telegraf(TELEGRAM_BOT_TOKEN, { handlerTimeout: Infinity }); // 无限，由 spawn DROID_TIMEOUT 统一控制
 const userSessions = new Map();
 
 // ==================== 上下文感知 ====================
